@@ -11,7 +11,7 @@ public class Stock
 
 	public string Date;
 
-	public float Value;
+	public string Value;
 }
 
 public class DataParse : MonoBehaviour
@@ -40,7 +40,7 @@ public class DataParse : MonoBehaviour
         foreach (string file in files)
         {
             print(file);
-            var result = engine.ReadFile("file");
+            var result = engine.ReadFile(file);
         }
     }
 }
