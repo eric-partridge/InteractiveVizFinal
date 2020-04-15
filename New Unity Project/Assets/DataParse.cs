@@ -17,6 +17,7 @@ public class Stock
 public class DataParse : MonoBehaviour
 {
     public string current_directory;
+    public List<Stock[]> stockList;
 
     // Start is called before the first frame update
 
@@ -41,6 +42,7 @@ public class DataParse : MonoBehaviour
         {
             print(file);
             var result = engine.ReadFile(file);
+            stockList.Add(result);
         }
     }
 }
