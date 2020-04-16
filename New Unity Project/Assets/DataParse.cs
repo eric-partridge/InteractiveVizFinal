@@ -36,7 +36,7 @@ public class DataParse : MonoBehaviour
     {
         var engine = new FileHelperEngine<Stock>();
         current_directory = Directory.GetCurrentDirectory();
-        current_directory += "\\Data";
+        current_directory += "//Data";
         string[] files = Directory.GetFiles(current_directory);
         foreach (string file in files)
         {
