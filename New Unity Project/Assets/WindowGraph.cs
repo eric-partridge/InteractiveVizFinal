@@ -43,7 +43,7 @@ public class WindowGraph : MonoBehaviour
 
         foreach (Stock s in DataParse.instance.stockList[0])
         {
-            print(s.Value);
+            //print(s.Value);
             valueList.Add(float.Parse(s.Value));
         }
         GraphSetup((float _f) => "$" + Mathf.RoundToInt(_f));

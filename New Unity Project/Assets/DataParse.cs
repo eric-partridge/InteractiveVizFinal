@@ -18,11 +18,18 @@ public class Stock
 public class DataParse : MonoBehaviour
 {
 
-    public string current_directory;
+    [HideInInspector] public string current_directory;
     public List<Stock[]> stockList;
+    public static bool windows = false;
     public static DataParse instance;
 
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            windows = true;
+        }
+    }
 
     void Start()
     {
@@ -31,17 +38,16 @@ public class DataParse : MonoBehaviour
         ParseAll();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void ParseAll()
     {
         var engine = new FileHelperEngine<Stock>();
         current_directory = Directory.GetCurrentDirectory();
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        if (windows)
         {
             current_directory += "\\Data";
         }
@@ -56,5 +62,12 @@ public class DataParse : MonoBehaviour
             var result = engine.ReadFile(file);
             stockList.Add(result);
         }
+    }
+
+    public static Stock[] Parse(string path)
+    {
+        var engine = new FileHelperEngine<Stock>();
+        var result = engine.ReadFile(path);
+        return result;
     }
 }
