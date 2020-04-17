@@ -25,6 +25,7 @@ public class DataParse : MonoBehaviour
 
     void Start()
     {
+        stockList = new List<Stock[]>();
         ParseAll();
     }
 
