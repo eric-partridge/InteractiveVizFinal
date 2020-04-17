@@ -20,11 +20,13 @@ public class DataParse : MonoBehaviour
 
     public string current_directory;
     public List<Stock[]> stockList;
+    public static DataParse instance;
 
     // Start is called before the first frame update
 
     void Start()
     {
+        instance = this;
         stockList = new List<Stock[]>();
         ParseAll();
     }
@@ -50,7 +52,7 @@ public class DataParse : MonoBehaviour
         string[] files = Directory.GetFiles(current_directory);
         foreach (string file in files)
         {
-            print(file);
+            //print(file);
             var result = engine.ReadFile(file);
             stockList.Add(result);
         }

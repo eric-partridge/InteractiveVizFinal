@@ -34,15 +34,19 @@ public class WindowGraph : MonoBehaviour
         labelTemplateY = graphContainer.Find("labelTemplateY").GetComponent<RectTransform>();
         graphHeight = graphContainer.sizeDelta.y;
         graphWidth = graphContainer.sizeDelta.x;
-
-        valueList = new List<float>() { 5, 98, 56, 45, 30, 22, 17, 15, 13, 17, 25, 37, 40, 36, 36, 33 };
-        GraphSetup((float _f) => "$" + Mathf.RoundToInt(_f));
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        valueList = new List<float>();
+
+        foreach (Stock s in DataParse.instance.stockList[0])
+        {
+            print(s.Value);
+            valueList.Add(float.Parse(s.Value));
+        }
+        GraphSetup((float _f) => "$" + Mathf.RoundToInt(_f));
     }
 
     // Update is called once per frame
