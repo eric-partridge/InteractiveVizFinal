@@ -669,7 +669,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   current_directory: 
-  windows: 0
 --- !u!4 &722964320
 Transform:
   m_ObjectHideFlags: 0
@@ -699,6 +698,7 @@ MonoBehaviour:
   text_directory: 
   root_directory: 
   current_directory: 
+  text_box: {fileID: 195059984}
 --- !u!1 &740865418
 GameObject:
   m_ObjectHideFlags: 0
