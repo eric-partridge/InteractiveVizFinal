@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using FileHelpers;
+using System.Runtime.InteropServices;
 
 [DelimitedRecord(",")]
 public class Stock
@@ -16,6 +17,7 @@ public class Stock
 
 public class DataParse : MonoBehaviour
 {
+
     public string current_directory;
     public List<Stock[]> stockList;
 
@@ -36,7 +38,14 @@ public class DataParse : MonoBehaviour
     {
         var engine = new FileHelperEngine<Stock>();
         current_directory = Directory.GetCurrentDirectory();
-        current_directory += "//Data";
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            current_directory += "\\Data";
+        }
+        else
+        {
+            current_directory += "//Data";
+        }
         string[] files = Directory.GetFiles(current_directory);
         foreach (string file in files)
         {
