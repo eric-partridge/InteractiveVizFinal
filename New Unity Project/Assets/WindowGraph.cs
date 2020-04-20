@@ -276,6 +276,7 @@ public class WindowGraph : MonoBehaviour
                 action = actionHandlerScript.GetNewAction();
                 foreach(Stock s in action._stockData[0])
                 {
+                    //print("Value:" + s.Value);
                     actionValueList.Add(float.Parse(s.Value));
                 }
                 actionComplete = false;
