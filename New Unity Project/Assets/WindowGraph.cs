@@ -102,13 +102,13 @@ public class WindowGraph : MonoBehaviour
 
     private void AddDataPoint(float value, int i)
     {
-        currentValue = value;
-        previousValues.Add(value);
+        if (!redrawingGraph) { previousValues.Add(value); }
 
-        //calculate x and y position
-        float xSize = graphWidth / 15 - 1;
+        //calculate xsize
+        float xSize = graphWidth / 15;
         float xPos;
 
+        //calculate x position
         if (redrawingGraph) { xPos = xSize + (i - 1) * xSize; }
         else
         {
@@ -116,9 +116,10 @@ public class WindowGraph : MonoBehaviour
             else { xPos = xSize + (day - 1) * xSize; }
         }
 
+        //calculate y position
         float yPos = (value/ yMax) * graphHeight;
 
-        //draw circle at that positon
+        //draw circle at that positon and at it to list for managing later
         GameObject circleGO = CreateCircle(new Vector2(xPos, yPos));
         if (previousCircleGO != null)
         {
@@ -127,8 +128,10 @@ public class WindowGraph : MonoBehaviour
         dots.Add(circleGO);
         previousCircleGO = circleGO;
 
+
         if (!redrawingGraph)
         {
+            //if less than day 15, create new label and assign text to day value
             if(day <= 15)
             {
                 //add x axis label
@@ -139,13 +142,14 @@ public class WindowGraph : MonoBehaviour
                 labelX.GetComponent<Text>().text = day.ToString();
                 xAxisLabels.Add(labelX);
             }
+            //over day 15, label already exists, simply change text
             else
             {
                 xAxisLabels[14].GetComponent<Text>().text = day.ToString();
             }
-
         }
 
+        //update current price text at top
         currentPrice.text = "Price: $" + value.ToString();
     }
 
@@ -172,6 +176,8 @@ public class WindowGraph : MonoBehaviour
     public void NextDay()
     {
         day += 1;
+
+        //whenever over day 15, must redraw graph each time
         if (day > 15) 
         { 
             ClearGraph();
@@ -180,12 +186,19 @@ public class WindowGraph : MonoBehaviour
 
         AddDataPoint(GetNewValue(), 0);
 
+        //if reached end of the list, button is no longer interactable
         if(day == valueList.Count) { nextDayButton.interactable = false; }
     }
 
     private float GetNewValue()
     {
+        //calculate percent change
         float percentChange = ((valueList[day - 1] - valueList[0]) / valueList[0]);
+
+        //multiply it to emphasize change
+        percentChange *= UnityEngine.Random.Range(2.75f, 3.75f);
+
+        //calulate new value based on percent change
         if(percentChange < 0f)
         {
             float newValue = (int)((50 + (50 * percentChange)) * 100.0f) / 100.0f;
@@ -210,17 +223,21 @@ public class WindowGraph : MonoBehaviour
         //remove connecting lines
         foreach(GameObject x in lines) { Destroy(x); }
 
+        //set previous circle to null
         previousCircleGO = null;
     }
 
     private void RedrawGraph()
     {
         redrawingGraph = true;
+
+        //redraw first 14 points
         for(int i = 1; i < 15; i++)
         {
-            AddDataPoint(previousValues[day - 15 + i], i);
+            AddDataPoint(previousValues[day - 15 + i -1], i);
             xAxisLabels[i-1].GetComponent<Text>().text = (day - 15 + i).ToString();
         }
+
         redrawingGraph = false;
     }
 }
