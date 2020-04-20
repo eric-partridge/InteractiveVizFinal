@@ -12,6 +12,7 @@ public class Action
     public float _weight;
     private float initWeight;
     private float time = 1f;
+    private bool locked = false;
     public List<Stock[]> _stockData = new List<Stock[]>();
 
     Action()
@@ -21,15 +22,17 @@ public class Action
         _text = "";
         initWeight = 0.2f;
         _weight = initWeight;
+        locked = false;
     }
 
-    public Action(string id, string name, string text, float weight)
+    public Action(string id, string name, string text, float weight, bool isLocked)
     {
         _ID = id;
         _name = name;
         _text = text;
         initWeight = weight;
         _weight = initWeight;
+        locked = isLocked;
     }
 
     //speed is a value between 0 and 1 that gets added to time. Reccomended 0.1 speed
@@ -45,6 +48,11 @@ public class Action
         {
             _weight = initWeight;
         }
+    }
+
+    public bool isLocked()
+    {
+        return locked;
     }
 }
 
@@ -93,7 +101,12 @@ public class ActionHandler : MonoBehaviour
         {
             string[] splitLine = line.Split('|');
             float w = float.Parse(splitLine[3]);
-            Action a = new Action(splitLine[0], splitLine[1], splitLine[2], w);
+            bool locked = false;
+            if(splitLine[4] == "y")
+            {
+                locked = true;
+            }
+            Action a = new Action(splitLine[0], splitLine[1], splitLine[2], w, locked);
             if (DataParse.windows)
             {
                 current_directory = root_directory + "\\" + splitLine[1];
@@ -125,17 +138,20 @@ public class ActionHandler : MonoBehaviour
         float w = selected._weight;
         for(int i = 1; i < action_list.Count; i++)
         {
-            float x = action_list[i]._weight;
-            float keepChance = Random.Range(0, w / (w + x));
-            float nextChance = Random.Range(0, x / (w + x));
-            if(keepChance > nextChance)
+            if (!action_list[i].isLocked())
             {
-                break;
-            }
-            else
-            {
-                selected = action_list[i];
-                w += selected._weight;
+                float x = action_list[i]._weight;
+                float keepChance = Random.Range(0, w / (w + x));
+                float nextChance = Random.Range(0, x / (w + x));
+                if (keepChance > nextChance)
+                {
+                    break;
+                }
+                else
+                {
+                    selected = action_list[i];
+                    w += selected._weight;
+                }
             }
         }
         text_box.text = selected._text;
