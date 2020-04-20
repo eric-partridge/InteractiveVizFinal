@@ -58,7 +58,6 @@ public class DataParse : MonoBehaviour
         string[] files = Directory.GetFiles(current_directory);
         foreach (string file in files)
         {
-            //print(file);
             var result = engine.ReadFile(file);
             stockList.Add(result);
         }
