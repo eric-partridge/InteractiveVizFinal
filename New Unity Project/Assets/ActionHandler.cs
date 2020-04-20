@@ -69,6 +69,7 @@ public class ActionHandler : MonoBehaviour
     {
         action_list = new List<Action>();
         GetActions();
+        text_box.text = "The market is currently normal";
     }
 
     // Update is called once per frame
@@ -157,5 +158,10 @@ public class ActionHandler : MonoBehaviour
         text_box.text = selected._text;
         selected._weight = 0;
         return selected;
+    }
+
+    public void ResetText()
+    {
+        text_box.text = "The stock market is back to normal now";
     }
 }
