@@ -17,6 +17,7 @@ public class WindowGraph : MonoBehaviour
     public Button nextDayButton;
     public Text currentPrice;
     public float startValue;
+    public GameObject dataReader;
 
     [SerializeField] private Sprite circleSprite;
     private RectTransform graphContainer;
@@ -26,6 +27,7 @@ public class WindowGraph : MonoBehaviour
     private float graphHeight;
     private int day = 1;
     private List<float> valueList;
+    private List<float> actionValueList;
     private List<float> previousValues;
     private List<GameObject> dots;
     private List<GameObject> lines;
@@ -33,6 +35,10 @@ public class WindowGraph : MonoBehaviour
     private GameObject previousCircleGO = null;
     private float currentValue;
     private bool redrawingGraph = false;
+    private bool actionComplete = true;
+    private Action action;
+    private ActionHandler actionHandlerScript;
+    private int actionDay = 2;
 
     private void Awake()
     {
@@ -41,6 +47,7 @@ public class WindowGraph : MonoBehaviour
         labelTemplateY = graphContainer.Find("labelTemplateY").GetComponent<RectTransform>();
         graphHeight = graphContainer.sizeDelta.y;
         graphWidth = graphContainer.sizeDelta.x;
+        actionHandlerScript = dataReader.GetComponent<ActionHandler>();
     }
 
     // Start is called before the first frame update
@@ -52,6 +59,7 @@ public class WindowGraph : MonoBehaviour
         dots = new List<GameObject>();
         lines = new List<GameObject>();
         xAxisLabels = new List<RectTransform>();
+        actionValueList = new List<float>();
 
         //set data from NASDAQ as intitail data
         foreach (Stock s in DataParse.instance.stockList[2])
@@ -102,6 +110,8 @@ public class WindowGraph : MonoBehaviour
 
     private void AddDataPoint(float value, int i)
     {
+        currentValue = value;
+
         if (!redrawingGraph) { previousValues.Add(value); }
 
         //calculate xsize
@@ -176,7 +186,9 @@ public class WindowGraph : MonoBehaviour
     public void NextDay()
     {
         day += 1;
+        if (!actionComplete) { actionDay += 1; }
 
+        CheckToGetAction();
         //whenever over day 15, must redraw graph each time
         if (day > 15) 
         { 
@@ -187,13 +199,16 @@ public class WindowGraph : MonoBehaviour
         AddDataPoint(GetNewValue(), 0);
 
         //if reached end of the list, button is no longer interactable
-        if(day == valueList.Count) { nextDayButton.interactable = false; }
+        if(day == valueList.Count && actionComplete) { nextDayButton.interactable = false; }
     }
 
     private float GetNewValue()
     {
+        float percentChange = 0f;
+
         //calculate percent change
-        float percentChange = ((valueList[day - 1] - valueList[0]) / valueList[0]);
+        if (actionComplete) { percentChange = ((valueList[day - 1] - valueList[day-2]) / valueList[day-2]); }
+        else { percentChange = ((actionValueList[actionDay - 1] - actionValueList[actionDay-2]) / actionValueList[actionDay-2]);  }
 
         //multiply it to emphasize change
         percentChange *= UnityEngine.Random.Range(2.75f, 3.75f);
@@ -201,12 +216,12 @@ public class WindowGraph : MonoBehaviour
         //calulate new value based on percent change
         if(percentChange < 0f)
         {
-            float newValue = (int)((50 + (50 * percentChange)) * 100.0f) / 100.0f;
+            float newValue = (int)((currentValue + (currentValue * percentChange)) * 100.0f) / 100.0f;
             return newValue;
         }
         else if(percentChange > 0f)
         {
-            float newValue = (int)((50 * (1f + percentChange)) * 100.0f) / 100.0f;
+            float newValue = (int)((currentValue * (1f + percentChange)) * 100.0f) / 100.0f;
             return newValue;
         }
         else
@@ -239,5 +254,31 @@ public class WindowGraph : MonoBehaviour
         }
 
         redrawingGraph = false;
+    }
+
+    private void CheckToGetAction()
+    {
+        //gone through all data for an action, reset action variables
+        if(actionDay == actionValueList.Count)
+        {
+            actionComplete = true;
+            action = null;
+            actionDay = 2;
+        }
+
+        //dont check for new action if you are already using one
+        if (actionComplete)
+        {
+            float x = UnityEngine.Random.Range(0f, 1f);
+            if (x < .1f)
+            {
+                action = actionHandlerScript.GetNewAction();
+                foreach(Stock s in action._stockData[0])
+                {
+                    actionValueList.Add(float.Parse(s.Value));
+                }
+                actionComplete = false;
+            }
+        }
     }
 }

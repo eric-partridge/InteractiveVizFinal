@@ -88,4 +88,10 @@ public class ActionHandler : MonoBehaviour
             action_list.Add(a);
         }
     }
+
+    public Action GetNewAction()
+    {
+        text_box.text = action_list[0]._text;
+        return action_list[0];
+    }
 }
