@@ -9,11 +9,13 @@ public class ButtonSpawn : MonoBehaviour
     public float spacing = 25;
     private float right = -400;
     private float up = 300;
+    public static ButtonSpawn instance;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
     }
 
     // Update is called once per frame
