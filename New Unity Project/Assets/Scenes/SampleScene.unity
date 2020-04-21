@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 195059985}
   - component: {fileID: 195059984}
   m_Layer: 5
-  m_Name: Text
+  m_Name: DialogueBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -927,7 +927,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skill_points: 0
-  skillPointDisplay: {fileID: 0}
+  skillPointDisplay: {fileID: 1436825638}
 --- !u!4 &890576371
 Transform:
   m_ObjectHideFlags: 0

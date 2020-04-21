@@ -121,7 +121,7 @@ public class ActionHandler : MonoBehaviour
             {
                 locked = true;
                 GameObject button = ButtonSpawn.instance.Spawn();
-                button.GetComponentInChildren<Text>().text = splitLine[1] + "   " + cost;
+                button.GetComponentInChildren<Text>().text = splitLine[1];
                 button.GetComponent<ButtonScript>().cost = cost;
                 button.GetComponent<ButtonScript>().ID = splitLine[0];
 
