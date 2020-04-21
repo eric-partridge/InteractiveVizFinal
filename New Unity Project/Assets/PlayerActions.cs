@@ -1,18 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerActions : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public int skill_points = 0;
+    public Text skillPointDisplay;
+    private string displaySetup = "Skill Points: ";
+
+    private void Awake()
     {
-        
+        UpdateDisplay();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateDisplay()
     {
-        
+        skillPointDisplay.text = displaySetup + skill_points;
+    }
+
+    public void UpdateSkillPoints()
+    {
+        skill_points += Mathf.RoundToInt(Random.Range(0, 4));
+        UpdateDisplay();
     }
 }
