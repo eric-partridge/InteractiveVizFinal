@@ -18,8 +18,10 @@ public class WindowGraph : MonoBehaviour
     public Text currentPrice;
     public float startValue;
     public GameObject dataReader;
+    public Sprite circleSprite;
+    public Sprite redCircleSprite;
+    public Sprite blueCircleSprite;
 
-    [SerializeField] private Sprite circleSprite;
     private RectTransform graphContainer;
     private RectTransform labelTemplateX;
     private RectTransform labelTemplateY;
@@ -39,6 +41,12 @@ public class WindowGraph : MonoBehaviour
     private Action action;
     private ActionHandler actionHandlerScript;
     private int actionDay = 2;
+    private bool redCircle = false;
+    private bool blueCircle = false;
+    private int actionStartDay = 0;
+    private int actionEndDay = 0;
+    private bool waitToDrawRedCircle = false;
+    private bool waitToDrawBlueCircle = false;
 
     private PlayerActions player;
 
@@ -88,7 +96,19 @@ public class WindowGraph : MonoBehaviour
         //draw a circle at desired location and return that object
         GameObject circle = new GameObject("circle", typeof(Image));
         circle.transform.SetParent(graphContainer, false);
-        circle.GetComponent<Image>().sprite = circleSprite;
+
+        //use proper circle based on action day or not
+        if (redCircle && !waitToDrawRedCircle) { 
+            circle.GetComponent<Image>().sprite = redCircleSprite;
+            redCircle = false;
+        }
+        else if (blueCircle && !waitToDrawBlueCircle) 
+        { 
+            circle.GetComponent<Image>().sprite = blueCircleSprite;
+            blueCircle = false;
+        }
+        else { circle.GetComponent<Image>().sprite = circleSprite; }
+
         RectTransform rectTransform = circle.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = anchoredPos;
         rectTransform.sizeDelta = circleSize;
@@ -205,6 +225,9 @@ public class WindowGraph : MonoBehaviour
             RedrawGraph();
         }
 
+        if (waitToDrawRedCircle) { waitToDrawRedCircle = false; }
+        if (waitToDrawBlueCircle) { waitToDrawBlueCircle = false; }
+
         AddDataPoint(GetNewValue(), 0);
 
         player.UpdateSkillPoints();
@@ -257,6 +280,14 @@ public class WindowGraph : MonoBehaviour
         //redraw first 14 points
         for(int i = 1; i < 15; i++)
         {
+            if(day-15+i == actionStartDay)
+            {
+                redCircle = true;
+            }
+            if(day-15+i == actionEndDay)
+            {
+                blueCircle = true;
+            }
             AddDataPoint(previousValues[day - 15 + i -1], i);
             xAxisLabels[i-1].GetComponent<Text>().text = (day - 15 + i).ToString();
         }
@@ -274,6 +305,9 @@ public class WindowGraph : MonoBehaviour
             actionComplete = true;
             action = null;
             actionDay = 2;
+            blueCircle = true;
+            actionEndDay = day;
+            if(day > 15) { waitToDrawBlueCircle = true; }
         }
 
         //dont check for new action if you are already using one
@@ -289,6 +323,9 @@ public class WindowGraph : MonoBehaviour
                     actionValueList.Add(float.Parse(s.Value));
                 }
                 actionComplete = false;
+                redCircle = true;
+                actionStartDay = day;
+                if(day > 15) { waitToDrawRedCircle = true; }
             }
         }
     }
