@@ -21,7 +21,7 @@ public class PlayerActions : MonoBehaviour
 
     public void UpdateSkillPoints()
     {
-        skill_points += Mathf.RoundToInt(Random.Range(0, 4));
+        skill_points += Mathf.RoundToInt(Random.Range(0, 3));
         UpdateDisplay();
     }
 }
