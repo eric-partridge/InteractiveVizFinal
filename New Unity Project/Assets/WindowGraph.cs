@@ -189,6 +189,12 @@ public class WindowGraph : MonoBehaviour
         if (!actionComplete) { actionDay += 1; }
 
         CheckToGetAction();
+
+        //if reached end of the list, button is no longer interactable
+        if (day >= valueList.Count && actionComplete) { 
+            nextDayButton.interactable = false;
+            return;
+        }
         //whenever over day 15, must redraw graph each time
         if (day > 15) 
         { 
@@ -197,9 +203,6 @@ public class WindowGraph : MonoBehaviour
         }
 
         AddDataPoint(GetNewValue(), 0);
-
-        //if reached end of the list, button is no longer interactable
-        if(day == valueList.Count && actionComplete) { nextDayButton.interactable = false; }
     }
 
     private float GetNewValue()
@@ -261,7 +264,6 @@ public class WindowGraph : MonoBehaviour
         //gone through all data for an action, reset action variables
         if(actionDay == actionValueList.Count)
         {
-            print("Action complete on day: " + day);
             actionHandlerScript.ResetText();
             actionValueList.Clear();
             actionComplete = true;
@@ -277,7 +279,6 @@ public class WindowGraph : MonoBehaviour
             {
                 actionHandlerScript.updateWeights(0.1f);
                 action = actionHandlerScript.GetNewAction();
-                print("New action: " + action._name + " on day: " + day);
                 foreach(Stock s in action._stockData[0])
                 {
                     actionValueList.Add(float.Parse(s.Value));
