@@ -58,6 +58,11 @@ public class Action
         return locked;
     }
 
+    public void Unlock()
+    {
+        locked = false;
+    }
+
     public int getCost()
     {
         return cost;
@@ -118,6 +123,7 @@ public class ActionHandler : MonoBehaviour
                 GameObject button = ButtonSpawn.instance.Spawn();
                 button.GetComponentInChildren<Text>().text = splitLine[1] + "   " + cost;
                 button.GetComponent<ButtonScript>().cost = cost;
+                button.GetComponent<ButtonScript>().ID = splitLine[0];
 
             }
             Action a = new Action(splitLine[0], splitLine[1], splitLine[2], w, locked, cost);
@@ -144,6 +150,24 @@ public class ActionHandler : MonoBehaviour
         {
             a.updateWeight(t);
         }
+    }
+
+    public Action FindByID(string ID)
+    {
+        Action ret = null;
+        foreach(Action a in action_list)
+        {
+            if(a._ID == ID)
+            {
+                ret = a;
+                break;
+            }
+        }
+        if(ret == null)
+        {
+            Debug.Log("Could Not Find ID: " + ID);
+        }
+        return ret;
     }
 
     public Action GetNewAction()
