@@ -41,10 +41,14 @@ public class Action
     //speed is a value between 0 and 1 that gets added to time. Reccomended 0.1 speed
     public void updateWeight(float speed)
     {
+        if(_weight == 0)
+        {
+            time = 0;
+        }
         if(_weight < initWeight)
         {
-            _weight = Mathf.Lerp(_weight, initWeight, time);
             time += speed;
+            _weight = Mathf.Lerp(_weight, initWeight, time);
             if(time > 1) { time = 1; }
         }
         if(_weight > initWeight)
@@ -77,21 +81,11 @@ public class ActionHandler : MonoBehaviour
     public Text text_box;
     public List<Action> action_list;
 
-    // Start is called before the first frame update
     void Start()
     {
         action_list = new List<Action>();
         GetActions();
         text_box.text = "The market is currently normal";
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            text_box.text = action_list[0]._text;
-        }
     }
 
     void GetActions()
@@ -181,6 +175,9 @@ public class ActionHandler : MonoBehaviour
                 float x = action_list[i]._weight;
                 float keepChance = Random.Range(0, w / (w + x));
                 float nextChance = Random.Range(0, x / (w + x));
+                //print("w: " + w);
+                //print("x: " + x);
+                //print("keep: " + keepChance + "   next: " + nextChance);
                 if (keepChance > nextChance)
                 {
                     break;
