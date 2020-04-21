@@ -40,6 +40,8 @@ public class WindowGraph : MonoBehaviour
     private ActionHandler actionHandlerScript;
     private int actionDay = 2;
 
+    private PlayerActions player;
+
     private void Awake()
     {
         graphContainer = transform.Find("Graph Container").GetComponent<RectTransform>();
@@ -48,6 +50,7 @@ public class WindowGraph : MonoBehaviour
         graphHeight = graphContainer.sizeDelta.y;
         graphWidth = graphContainer.sizeDelta.x;
         actionHandlerScript = dataReader.GetComponent<ActionHandler>();
+        player = GameObject.Find("Player").GetComponent<PlayerActions>();
     }
 
     // Start is called before the first frame update
@@ -203,6 +206,8 @@ public class WindowGraph : MonoBehaviour
         }
 
         AddDataPoint(GetNewValue(), 0);
+
+        player.UpdateSkillPoints();
     }
 
     private float GetNewValue()

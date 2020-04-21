@@ -10,6 +10,7 @@ public class ButtonScript : MonoBehaviour
     private ActionHandler ActionHandlerScript;
     private Button btn;
     private PlayerActions player;
+    private Text errorDiplay;
 
     private void Start()
     {
@@ -17,6 +18,7 @@ public class ButtonScript : MonoBehaviour
         btn.onClick.AddListener(unlockAction);
         ActionHandlerScript = GameObject.Find("DataReader").GetComponent<ActionHandler>();
         player = GameObject.Find("Player").GetComponent<PlayerActions>();
+        errorDiplay = GameObject.Find("DialogueBox").GetComponent<Text>();
     }
 
     public void unlockAction()
@@ -31,7 +33,7 @@ public class ButtonScript : MonoBehaviour
         }
         else
         {
-            Debug.Log("Not Enough Skill Points");
+            errorDiplay.text = "Not enough skill points.";
         }
     }
 }
