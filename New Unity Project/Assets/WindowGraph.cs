@@ -316,7 +316,7 @@ public class WindowGraph : MonoBehaviour
             float x = UnityEngine.Random.Range(0f, 1f);
             if (x < .1f)
             {
-                actionHandlerScript.updateWeights(0.1f);
+                actionHandlerScript.updateWeights(0.01f);
                 action = actionHandlerScript.GetNewAction();
                 foreach(Stock s in action._stockData[0])
                 {
