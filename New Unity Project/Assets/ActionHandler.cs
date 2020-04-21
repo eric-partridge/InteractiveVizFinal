@@ -81,6 +81,15 @@ public class ActionHandler : MonoBehaviour
     public Text text_box;
     public List<Action> action_list;
 
+    private List<string> resetResponses = new List<string>()
+    {
+        "The stock market is back to normal now.",
+        "Nothing out of the ordinary is going on right now.",
+        "Things are currently pretty average.",
+        "The stocks seem to be returning to normal.",
+        "The event is over now."
+    };
+
     void Start()
     {
         action_list = new List<Action>();
@@ -196,6 +205,7 @@ public class ActionHandler : MonoBehaviour
 
     public void ResetText()
     {
-        text_box.text = "The stock market is back to normal now";
+        int i = Mathf.RoundToInt(Random.Range(0, resetResponses.Count));
+        text_box.text = resetResponses[i];
     }
 }
