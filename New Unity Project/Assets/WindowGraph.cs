@@ -318,9 +318,12 @@ public class WindowGraph : MonoBehaviour
             {
                 actionHandlerScript.updateWeights(0.01f);
                 action = actionHandlerScript.GetNewAction();
-                foreach(Stock s in action._stockData[0])
+                int i = 0;
+                foreach (Stock s in action._stockData[0])
                 {
+                    if(i > 13) { break; }
                     actionValueList.Add(float.Parse(s.Value));
+                    i += 1;
                 }
                 actionComplete = false;
                 redCircle = true;
