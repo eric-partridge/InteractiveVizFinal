@@ -21,13 +21,9 @@ public class ButtonSpawn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            Spawn();
-        }
     }
 
-    public void Spawn()
+    public GameObject Spawn()
     {
         GameObject b = Instantiate(button);
         b.transform.parent = treeBox.transform;
@@ -40,5 +36,6 @@ public class ButtonSpawn : MonoBehaviour
             up = 300;
             right += 200 + spacing;
         }
+        return b;
     }
 }

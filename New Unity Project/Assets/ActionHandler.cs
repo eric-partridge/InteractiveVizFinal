@@ -13,6 +13,7 @@ public class Action
     private float initWeight;
     private float time = 1f;
     private bool locked = false;
+    private int cost = 0;
     public List<Stock[]> _stockData = new List<Stock[]>();
 
     Action()
@@ -23,9 +24,10 @@ public class Action
         initWeight = 0.2f;
         _weight = initWeight;
         locked = false;
+        cost = 0;
     }
 
-    public Action(string id, string name, string text, float weight, bool isLocked)
+    public Action(string id, string name, string text, float weight, bool isLocked, int aCost)
     {
         _ID = id;
         _name = name;
@@ -33,6 +35,7 @@ public class Action
         initWeight = weight;
         _weight = initWeight;
         locked = isLocked;
+        cost = aCost;
     }
 
     //speed is a value between 0 and 1 that gets added to time. Reccomended 0.1 speed
@@ -53,6 +56,11 @@ public class Action
     public bool isLocked()
     {
         return locked;
+    }
+
+    public int getCost()
+    {
+        return cost;
     }
 }
 
@@ -102,12 +110,17 @@ public class ActionHandler : MonoBehaviour
         {
             string[] splitLine = line.Split('|');
             float w = float.Parse(splitLine[3]);
+            int cost = int.Parse(splitLine[5]);
             bool locked = false;
             if(splitLine[4] == "y")
             {
                 locked = true;
+                GameObject button = ButtonSpawn.instance.Spawn();
+                button.GetComponentInChildren<Text>().text = splitLine[1] + "   " + cost;
+                button.GetComponent<ButtonScript>().cost = cost;
+
             }
-            Action a = new Action(splitLine[0], splitLine[1], splitLine[2], w, locked);
+            Action a = new Action(splitLine[0], splitLine[1], splitLine[2], w, locked, cost);
             if (DataParse.windows)
             {
                 current_directory = root_directory + "\\" + splitLine[1];

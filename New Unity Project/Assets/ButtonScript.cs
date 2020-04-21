@@ -1,18 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ButtonScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [HideInInspector] public int cost = 0;
+
+    private void Start()
     {
-        
+        Button btn = gameObject.GetComponent<Button>();
+        btn.onClick.AddListener(unlockAction);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void unlockAction()
     {
-        
+        Debug.Log("unlocked");
     }
 }
