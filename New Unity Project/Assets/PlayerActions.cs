@@ -16,7 +16,7 @@ public class PlayerActions : MonoBehaviour
 
     public void UpdateDisplay()
     {
-        //skillPointDisplay.text = displaySetup + skill_points;
+        skillPointDisplay.text = displaySetup + skill_points;
     }
 
     public void UpdateSkillPoints()
