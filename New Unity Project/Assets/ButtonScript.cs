@@ -47,14 +47,14 @@ public class ButtonScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public void OnPointerEnter(PointerEventData eventData)
     {
         mouse_over = true;
-        Debug.Log("Mouse enter");
+        //Debug.Log("Mouse enter");
         btnText.text = cost.ToString();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         mouse_over = false;
-        Debug.Log("Mouse exit");
+        //Debug.Log("Mouse exit");
         btnText.text = init_text;
     }
 }

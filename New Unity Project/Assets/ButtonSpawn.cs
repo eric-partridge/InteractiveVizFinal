@@ -7,7 +7,7 @@ public class ButtonSpawn : MonoBehaviour
     public GameObject button;
     public GameObject treeBox;
     public float spacing = 25;
-    private float right = -400;
+    private float right = -350;
     private float up = 300;
     public static ButtonSpawn instance;
 
